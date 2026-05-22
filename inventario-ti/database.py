@@ -1,25 +1,23 @@
 import csv
 import os
-# Escrever
 
 def inicializar_arquivos():
     if not os.path.exists("ativos.csv"):
         with open("ativos.csv", "w") as arquivo:
             writer = csv.writer(arquivo)
-            writer.writerow(["id", "nome", "responsavel", "setor", "localização", "tipo"])  # cabeçalho
+            writer.writerow(["id", "nome", "responsavel", "setor", "localizacao", "tipo"])
 
 def carregar_ativos():
     with open("ativos.csv", "r") as arquivo:
         ativos = {}
         reader = csv.DictReader(arquivo)
         for linha in reader:
-           ativos[int(linha["id"])] = linha
-        return ativos    
-    
+            ativos[int(linha["id"])] = linha
+        return ativos
 
 def salvar_ativos(id, nome, responsavel, setor, localizacao, tipo):
     with open("ativos.csv", "a") as arquivo:
-        writer = csv.writer(arquivo) 
+        writer = csv.writer(arquivo)
         writer.writerow([id, nome, responsavel, setor, localizacao, tipo])
 
 def remover_ativos(id):
@@ -27,7 +25,7 @@ def remover_ativos(id):
     ativos_filtrados = []
     for linha in ativos.values():
         if int(linha["id"]) != id:
-            ativos_filtrados.append(linha)      
+            ativos_filtrados.append(linha)
     with open("ativos.csv", "w") as arquivo:
         writer = csv.writer(arquivo)
         writer.writerow(["id", "nome", "responsavel", "setor", "localizacao", "tipo"])
@@ -41,14 +39,7 @@ def atualizar_ativo(id, nome, responsavel, setor, localizacao, tipo):
         if int(linha["id"]) != id:
             ativos_atualizado.append(linha)
         else:
-            ativos_atualizado.append({       # substitui pelos novos dados
-            "id": id,
-            "nome": nome,
-            "responsavel": responsavel,
-            "setor": setor,
-            "localizacao": localizacao,
-            "tipo": tipo
-            })
+            ativos_atualizado.append({"id": id, "nome": nome, "responsavel": responsavel, "setor": setor, "localizacao": localizacao, "tipo": tipo})
     with open("ativos.csv", "w") as arquivo:
         writer = csv.writer(arquivo)
         writer.writerow(["id", "nome", "responsavel", "setor", "localizacao", "tipo"])
@@ -61,7 +52,7 @@ def buscar_ativo(id):
         return ativos[id]
     else:
         return None
-    
+
 def buscar_ativo_por_nome(nome):
     ativos = carregar_ativos()
     for ativo in ativos.values():
@@ -71,13 +62,13 @@ def buscar_ativo_por_nome(nome):
 
 def inicializar_vulnerabilidades():
     if not os.path.exists("vulnerabilidades.csv"):
-        with open("vulnerabilidades.csv", "w") as arquivos:
-            writer =csv.writer(arquivos)
+        with open("vulnerabilidades.csv", "w") as arquivo:
+            writer = csv.writer(arquivo)
             writer.writerow(["id_vuln", "id_ativo", "descricao", "categoria", "severidade", "status"])
 
 def salvar_vulnerabilidade(id_vuln, id_ativo, descricao, categoria, severidade, status):
     with open("vulnerabilidades.csv", "a") as arquivo:
-        writer = csv.writer(arquivo) 
+        writer = csv.writer(arquivo)
         writer.writerow([id_vuln, id_ativo, descricao, categoria, severidade, status])
 
 def carregar_vulnerabilidades(id_ativo):
@@ -87,4 +78,4 @@ def carregar_vulnerabilidades(id_ativo):
         for linha in reader:
             if int(linha["id_ativo"]) == id_ativo:
                 vulnerabilidades[int(linha["id_vuln"])] = linha
-        return vulnerabilidades    
+        return vulnerabilidades
