@@ -36,6 +36,7 @@ while True:
 
         if ativo is None:
             print("Ativo não encontrado")
+            print()
         else:
             print(ativo)
 
