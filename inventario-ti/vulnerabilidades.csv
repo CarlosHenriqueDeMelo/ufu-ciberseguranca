@@ -1,3 +1,4 @@
-id_vuln,id_ativo,descricao,categoria,severidade,status
-1234,1234,DESK,TGRAVE,GGRAVE,ON
-1234,1234,teste,teste,teste,teste
+id_ativo,descricao,categoria,severidade,status
+0,,,,
+0,senha fraca,severa,grave,em  andamento
+0,user padrao,media,grave,aceita
