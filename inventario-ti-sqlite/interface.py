@@ -353,7 +353,4 @@ tk.Button(janela, text="Atualizar Ativo", width=25, command=abrir_atualizar).pac
 tk.Button(janela, text="Remover Ativo", width=25, command=abrir_remover).pack(pady=5)
 tk.Button(janela, text="Vulnerabilidades", width=25, command=abrir_vulns).pack(pady=5)
 
-
-    #ARRUMAR ID (NN PODE USAR O MESMO ID)
-    #ARRUMAR ATUALIZAR ATIVO
 janela.mainloop()
