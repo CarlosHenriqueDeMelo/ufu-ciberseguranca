@@ -1,9 +1,10 @@
 import tkinter as tk
-from database import *
+from database_sqlite import *
 from enums import *
+inicializar_banco()
 
-inicializar_arquivos()
-inicializar_vulnerabilidades()
+#inicializar_arquivos()
+#inicializar_vulnerabilidades()
 
 janela = tk.Tk()
 janela.title("Sistema de Inventário TI")
@@ -55,12 +56,12 @@ def abrir_cadastrar():
             setor = campo_setor.get().strip()
             tipo = tipo_var.get()
 
-            
+            # verifica se algum campo está vazio
             if not nome or not responsavel or not setor:
                 tk.Label(janela_cadastro, text="Preencha todos os campos!", fg="red").pack()
                 return
 
-            salvar_ativos(id, nome, responsavel, setor, tipo)
+            salvar_ativo(id, nome, responsavel, setor, tipo)
             janela_cadastro.destroy()
 
         except ValueError:
@@ -176,7 +177,7 @@ def abrir_atualizar():
 
     tk.Button(janela_atualizar, text="Salvar Alterações", command=salvar).pack(pady=10)
       
-def remover_ativo():
+def abrir_remover():
     janela_remover = tk.Toplevel(janela)
     janela_remover.title("Remover Ativo")
     janela_remover.geometry("350x350")
@@ -205,7 +206,7 @@ def remover_ativo():
                     text="Ativo não encontrado"
                 )
             else:
-                remover_ativos(id)
+                remover_ativo(id)
 
                 resultado.config(
                     text="Ativo removido!",
@@ -251,12 +252,18 @@ def abrir_vulns():
         campo_categoria.pack()
         
         tk.Label(janela_vuln, text="Severidade:").pack()
-        campo_severidade = tk.Entry(janela_vuln)
-        campo_severidade.pack()
+        severidade_var = tk.StringVar()
+        severidade_var.set(SeveridadeVuln.baixa.name)
+        opcoes_severidade = [s.name for s in SeveridadeVuln]
+        tk.OptionMenu(janela_vuln, severidade_var, *opcoes_severidade).pack()
         
         tk.Label(janela_vuln, text="Status:").pack()
-        campo_status = tk.Entry(janela_vuln)
-        campo_status.pack()
+        status_var = tk.StringVar()
+        status_var.set(StatusVuln.aberta.name)
+        opcoes_status = [s.name for s in StatusVuln]
+        tk.OptionMenu(janela_vuln, status_var, *opcoes_status).pack()
+        
+        
         
         def salvar():
             try:
@@ -264,8 +271,8 @@ def abrir_vulns():
 
                 desc = campo_desc.get()
                 categoria = campo_categoria.get()
-                severidade = campo_severidade.get()
-                status = campo_status.get()
+                severidade = severidade_var.get()
+                status = status_var.get()
 
                 salvar_vulnerabilidade(
                     id_ativo,
@@ -309,18 +316,44 @@ def abrir_vulns():
             else:
                 texto = ""
                 for v in vulns.values():
-                    texto += f"\nDescrição: {v['descricao']}\nSeveridade: {v['severidade']}\nStatus: {v['status']}\n"
+                    texto += f"\nID: {v['id']}\nDescrição: {v['descricao']}\nCategoria: {v['categoria']}\nSeveridade: {v['severidade']}\nStatus: {v['status']}\n"
                 resultado.config(text=texto)
 
         tk.Button(janela_buscar_vuln, text="Buscar", command=buscar_vuln).pack(pady=5)
     tk.Button(janela_vuln, text="Visualizar Vulnerabilidades", width=25, command=abrir_visualizar_vuln).pack(pady=5)
-        
-tk.Label(janela, text="Sistema de Inventário de TI", font=("Arial", 14)).pack(pady=10)
+    
+    def abrir_remover_vuln():
+        janela_rem_vuln = tk.Toplevel(janela)
+        janela_rem_vuln.title("Remover Vulnerabilidade")
+        janela_rem_vuln.geometry("350x200")
+
+        tk.Label(janela_rem_vuln, text="ID da Vulnerabilidade:").pack()
+        campo_id_vuln = tk.Entry(janela_rem_vuln)
+        campo_id_vuln.pack()
+
+        resultado = tk.Label(janela_rem_vuln, text="")
+        resultado.pack()
+
+        def remover():
+            try:
+                id_vuln = int(campo_id_vuln.get())
+                remover_vulnerabilidade(id_vuln)
+                resultado.config(text="Vulnerabilidade removida!", fg="green")
+                janela_rem_vuln.after(1000, janela_rem_vuln.destroy)
+            except ValueError:
+                resultado.config(text="Digite um ID válido!", fg="red")
+
+        tk.Button(janela_rem_vuln, text="Remover", command=remover).pack(pady=10)
+    tk.Button(janela_vuln, text="Remover Vulnerabilidade", width=25, command=abrir_remover_vuln).pack(pady=5)    
+    tk.Label(janela, text="Sistema de Inventário de TI", font=("Arial", 14)).pack(pady=10)
 
 tk.Button(janela, text="Cadastrar Ativo", width=25, command=abrir_cadastrar).pack(pady=5)
 tk.Button(janela, text="Buscar Ativo", width=25, command=abrir_buscar).pack(pady=5)
 tk.Button(janela, text="Atualizar Ativo", width=25, command=abrir_atualizar).pack(pady=5)
-tk.Button(janela, text="Remover Ativo", width=25, command=remover_ativo).pack(pady=5)
+tk.Button(janela, text="Remover Ativo", width=25, command=abrir_remover).pack(pady=5)
 tk.Button(janela, text="Vulnerabilidades", width=25, command=abrir_vulns).pack(pady=5)
 
+
+    #ARRUMAR ID (NN PODE USAR O MESMO ID)
+    #ARRUMAR ATUALIZAR ATIVO
 janela.mainloop()
