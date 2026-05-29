@@ -3,9 +3,6 @@ from database_sqlite import *
 from enums import *
 inicializar_banco()
 
-#inicializar_arquivos()
-#inicializar_vulnerabilidades()
-
 janela = tk.Tk()
 janela.title("Sistema de Inventário TI")
 janela.geometry("400x300")
