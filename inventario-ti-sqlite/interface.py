@@ -53,7 +53,6 @@ def abrir_cadastrar():
             setor = campo_setor.get().strip()
             tipo = tipo_var.get()
 
-            # verifica se algum campo está vazio
             if not nome or not responsavel or not setor:
                 tk.Label(janela_cadastro, text="Preencha todos os campos!", fg="red").pack()
                 return
@@ -259,9 +258,7 @@ def abrir_vulns():
         status_var.set(StatusVuln.aberta.name)
         opcoes_status = [s.name for s in StatusVuln]
         tk.OptionMenu(janela_vuln, status_var, *opcoes_status).pack()
-        
-        
-        
+                
         def salvar():
             try:
                 id_ativo = int(campo_ID.get())
@@ -291,8 +288,7 @@ def abrir_vulns():
         tk.Button(janela_vuln, text="Salvar", command=salvar).pack(pady=10)
                 
     tk.Button(janela_vuln, text="Adicionar Vulnerabilidade", width=25, command=abrir_adicionar_vuln).pack(pady=5)
-            
-            
+                    
     def abrir_visualizar_vuln():
         janela_buscar_vuln = tk.Toplevel(janela)
         janela_buscar_vuln.title("Visualizar Vulnerabilidades")
